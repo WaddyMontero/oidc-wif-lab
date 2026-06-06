@@ -3,9 +3,51 @@ set -euo pipefail
 
 failures=0
 
+if command -v rg >/dev/null 2>&1; then
+  SEARCH_TOOL="rg"
+else
+  SEARCH_TOOL="grep"
+fi
+
 fail() {
   echo "GUARDRAIL FAILURE: $1" >&2
   failures=$((failures + 1))
+}
+
+search() {
+  if [[ "$SEARCH_TOOL" == "rg" ]]; then
+    rg "$@"
+  else
+    local supports_line_numbers="false"
+    local args=()
+
+    for arg in "$@"; do
+      if [[ "$arg" == "-n" ]]; then
+        supports_line_numbers="true"
+        continue
+      fi
+
+      # `grep` does not understand ripgrep's --glob flag. The only current use
+      # of --glob here is to exclude this script from self-matching, so we can
+      # safely drop that flag in the fallback path and rely on the explicit
+      # directory arguments passed by the caller.
+      if [[ "$arg" == "--glob" ]]; then
+        continue
+      fi
+
+      if [[ "$arg" == "!scripts/check-guardrails.sh" ]]; then
+        continue
+      fi
+
+      args+=("$arg")
+    done
+
+    if [[ "$supports_line_numbers" == "true" ]]; then
+      grep -R -n "${args[@]}"
+    else
+      grep -R "${args[@]}"
+    fi
+  fi
 }
 
 check_no_pattern() {
@@ -13,7 +55,7 @@ check_no_pattern() {
   local scope="$2"
   local message="$3"
 
-  if rg -n --glob "$scope" "$pattern" . >/dev/null; then
+  if search -n --glob "$scope" "$pattern" . >/dev/null; then
     fail "$message"
   fi
 }
@@ -23,7 +65,7 @@ check_required_pattern() {
   local file="$2"
   local message="$3"
 
-  if ! rg -n "$pattern" "$file" >/dev/null; then
+  if ! search -n "$pattern" "$file" >/dev/null; then
     fail "$message"
   fi
 }
@@ -33,7 +75,11 @@ check_no_pattern_in_tf() {
   local path="$2"
   local message="$3"
 
-  if rg -n -g '*.tf' "$pattern" "$path" >/dev/null; then
+  if [[ "$SEARCH_TOOL" == "rg" ]]; then
+    if rg -n -g '*.tf' "$pattern" "$path" >/dev/null; then
+      fail "$message"
+    fi
+  elif grep -R -n --include='*.tf' "$pattern" "$path" >/dev/null; then
     fail "$message"
   fi
 }
@@ -43,7 +89,7 @@ check_no_pattern_in_paths() {
   local message="$2"
   shift 2
 
-  if rg -n --glob '!scripts/check-guardrails.sh' "$pattern" "$@" >/dev/null; then
+  if search -n --glob '!scripts/check-guardrails.sh' "$pattern" "$@" >/dev/null; then
     fail "$message"
   fi
 }
@@ -58,11 +104,11 @@ check_no_pattern_in_paths 'GOOGLE_APPLICATION_CREDENTIALS=.*\.json' 'Do not poin
 check_no_pattern_in_tf 'principalSet://.*/\*' 'infra' 'Do not allow every principal in a pool to impersonate deployer service accounts.'
 check_no_pattern_in_paths 'private_key' 'Do not hardcode long-lived credentials.' .github scripts app infra
 
-if rg -n 'id-token:\s*write' .github/workflows/ci.yml >/dev/null; then
+if search -n 'id-token:\s*write' .github/workflows/ci.yml >/dev/null; then
   fail 'CI workflow must not request id-token: write.'
 fi
 
-if rg -n 'pull_request:' .github/workflows/deploy-staging.yml .github/workflows/deploy-production.yml >/dev/null; then
+if search -n 'pull_request:' .github/workflows/deploy-staging.yml .github/workflows/deploy-production.yml >/dev/null; then
   fail 'Deploy workflows must not trigger on pull_request.'
 fi
 
