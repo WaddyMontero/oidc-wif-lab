@@ -19,6 +19,18 @@ variable "github_repo" {
   type        = string
 }
 
+variable "staging_branch" {
+  description = "Dedicated branch allowed to deploy the staging environment."
+  type        = string
+  default     = "staging"
+}
+
+variable "production_branch" {
+  description = "Protected branch that production trust is anchored to."
+  type        = string
+  default     = "main"
+}
+
 variable "allow_unauthenticated" {
   description = "Whether Cloud Run should allow unauthenticated invocation. Off by default so public access is a conscious teaching choice."
   type        = bool

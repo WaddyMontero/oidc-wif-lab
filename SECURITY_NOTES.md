@@ -69,6 +69,17 @@ Long-lived keys are difficult to rotate, easy to leak, and often get copied into
 
 Manual production deployment creates an explicit human checkpoint. That reduces the chance that an ordinary merge, bad automation, or compromised lower-trust event path turns into an immediate production release.
 
+## Why staging may intentionally avoid `main`
+
+Deploying staging from `main` is a common and often reasonable choice. This lab intentionally uses a stricter model where staging is tied to a dedicated `staging` branch. That makes branch provenance part of the trust check and teaches that deployment identity can be constrained by more than repository ownership alone.
+
+Tradeoffs:
+
+- clearer separation between integration and production-ready history
+- tighter blast-radius reasoning for staging credentials
+- more branch management overhead
+- a risk of drift if promotion between `staging` and `main` is not disciplined
+
 ## Why `pull_request` deploys are dangerous
 
 Pull request events are higher-risk because they are closer to unreviewed or partially reviewed code paths. If deploy permissions are attached there, an attacker may get a shorter path from repository compromise to cloud actions.

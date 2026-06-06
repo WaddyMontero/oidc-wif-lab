@@ -6,6 +6,7 @@ locals {
       deployer_account_id = "gha-deployer-staging"
       pool_id             = "github-staging-pool"
       provider_id         = "github-staging-provider"
+      branch_name         = var.staging_branch
     }
     production = {
       service_name        = "oidc-wif-lab-production"
@@ -13,6 +14,7 @@ locals {
       deployer_account_id = "gha-deployer-production"
       pool_id             = "github-production-pool"
       provider_id         = "github-production-provider"
+      branch_name         = var.production_branch
     }
   }
 }
@@ -84,6 +86,7 @@ module "github_wif" {
   provider_id                   = each.value.provider_id
   github_owner                  = var.github_owner
   github_repo                   = var.github_repo
+  branch_name                   = each.value.branch_name
   deployer_service_account_name = module.iam[each.key].deployer_service_account_name
 
   depends_on = [google_project_service.required_apis]

@@ -2,6 +2,13 @@
 
 This repository teaches how GitHub Actions can deploy to Google Cloud without long-lived service account keys, while still keeping trust boundaries narrow enough to reason about.
 
+This lab intentionally treats branch selection as part of the trust boundary:
+
+- `staging` branch is the integration lane for staging deployments
+- `main` is reserved for the higher-trust production path
+
+That is stricter than the common "push to main, auto-deploy staging" pattern, but it is coherent when you want branch-level separation of concerns to be part of the teaching model.
+
 Mental model:
 
 ```text
@@ -69,7 +76,7 @@ More diagrams live in `docs/diagrams/`.
 
 ## Deploy flow
 
-- Push to `main` to trigger staging deployment.
+- Push to `staging` to trigger staging deployment.
 - Use the `Deploy Production` workflow manually for production.
 - Use `OIDC Claims Debug` to inspect the token payload safely.
 
@@ -91,6 +98,9 @@ This repository demonstrates secure patterns and intentionally insecure examples
 
 Action pinning note:
 The workflows use stable major action tags for readability in a teaching repo. In production, prefer pinning third-party actions to full commit SHAs and reviewing updates deliberately.
+
+Branch-separation note:
+This lab shows that branch selection can be part of the trust condition, not just a convenience trigger. Staging does not automatically deploy every `main` change here.
 
 ## Learning path
 

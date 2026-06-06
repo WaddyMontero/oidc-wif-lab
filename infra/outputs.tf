@@ -18,6 +18,14 @@ output "github_repo" {
   value = var.github_repo
 }
 
+output "staging_branch" {
+  value = var.staging_branch
+}
+
+output "production_branch" {
+  value = var.production_branch
+}
+
 output "artifact_registry_repository" {
   value = module.artifact_registry.repository_id
 }

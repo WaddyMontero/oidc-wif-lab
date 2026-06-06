@@ -27,9 +27,9 @@ resource "google_iam_workload_identity_pool_provider" "this" {
   attribute_condition = <<-EOT
     attribute.repository_owner == "${var.github_owner}" &&
     attribute.repository == "${var.github_owner}/${var.github_repo}" &&
-    attribute.ref == "refs/heads/main" &&
+    attribute.ref == "refs/heads/${var.branch_name}" &&
     attribute.environment == "${var.environment}" &&
-    attribute.workflow_ref == "${var.github_owner}/${var.github_repo}/.github/workflows/deploy-${var.environment}.yml@refs/heads/main"
+    attribute.workflow_ref == "${var.github_owner}/${var.github_repo}/.github/workflows/deploy-${var.environment}.yml@refs/heads/${var.branch_name}"
   EOT
 
   oidc {

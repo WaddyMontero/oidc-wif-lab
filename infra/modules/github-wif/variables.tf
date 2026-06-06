@@ -18,6 +18,10 @@ variable "github_repo" {
   type = string
 }
 
+variable "branch_name" {
+  type = string
+}
+
 variable "deployer_service_account_name" {
   type = string
 }

@@ -29,6 +29,13 @@ The workflow job does not become a project owner. It borrows a specific service 
 
 Separate pools, providers, and deployer service accounts create smaller failure domains. If the staging workflow is compromised, the production trust path should still be a separate question rather than an automatic yes.
 
+In this lab, the branch is part of that split too:
+
+- staging trust expects `refs/heads/staging`
+- production trust expects `refs/heads/main`
+
+That is stricter than many repos, but it is coherent when you want integration activity and production-ready history to move on separate rails.
+
 ## Diagram
 
 See [docs/diagrams/trust-flow.mmd](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/docs/diagrams/trust-flow.mmd).

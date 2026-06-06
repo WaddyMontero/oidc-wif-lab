@@ -2,4 +2,6 @@ project_id             = "my-gcp-project-id"
 region                 = "us-central1"
 github_owner           = "my-github-user-or-org"
 github_repo            = "oidc-wif-lab"
+staging_branch         = "staging"
+production_branch      = "main"
 allow_unauthenticated  = false
