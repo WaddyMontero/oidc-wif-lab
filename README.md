@@ -6,10 +6,10 @@ Mental model:
 
 ```text
 GitHub Actions job
-  → receives OIDC JWT from GitHub
-  → GCP WIF validates claims
-  → job impersonates deployer service account
-  → deployer service account pushes image and deploys Cloud Run
+  -> receives OIDC JWT from GitHub
+  -> GCP WIF validates claims
+  -> job impersonates deployer service account
+  -> deployer service account pushes image and deploys Cloud Run
 ```
 
 ## What this lab teaches
@@ -35,7 +35,7 @@ flowchart TD
     G --> H["Deploy image to Cloud Run"]
 ```
 
-More diagrams live in [docs/diagrams/trust-flow.mmd](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/docs/diagrams/trust-flow.mmd), [docs/diagrams/iam-relationships.mmd](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/docs/diagrams/iam-relationships.mmd), and [docs/diagrams/ci-cd-sequence.mmd](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/docs/diagrams/ci-cd-sequence.mmd).
+More diagrams live in `docs/diagrams/`.
 
 ## Prerequisites
 
@@ -54,8 +54,8 @@ More diagrams live in [docs/diagrams/trust-flow.mmd](/Users/waddymontero/Documen
    gcloud auth login
    gcloud auth application-default login
    ```
-2. Copy [infra/terraform.tfvars.example](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/infra/terraform.tfvars.example) to `infra/terraform.tfvars` and fill in the real project and repo values.
-3. Review the infrastructure notes in [infra/README.md](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/infra/README.md).
+2. Copy `infra/terraform.tfvars.example` to `infra/terraform.tfvars` and fill in the real project and repo values.
+3. Review the infrastructure notes in `infra/README.md`.
 4. Initialize and apply Terraform:
    ```bash
    make terraform-fmt
@@ -79,7 +79,7 @@ More diagrams live in [docs/diagrams/trust-flow.mmd](/Users/waddymontero/Documen
 make destroy
 ```
 
-Also review [docs/runbooks/cleanup.md](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/docs/runbooks/cleanup.md).
+Also review `docs/runbooks/cleanup.md`.
 
 ## Warnings
 
@@ -94,7 +94,7 @@ The workflows use stable major action tags for readability in a teaching repo. I
 
 ## Learning path
 
-- Workshops: [docs/workshops/01-oidc-and-github-actions.md](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/docs/workshops/01-oidc-and-github-actions.md), [docs/workshops/02-gcp-wif-and-service-account-impersonation.md](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/docs/workshops/02-gcp-wif-and-service-account-impersonation.md), [docs/workshops/03-iam-blast-radius-review.md](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/docs/workshops/03-iam-blast-radius-review.md), [docs/workshops/04-break-fix-exercises.md](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/docs/workshops/04-break-fix-exercises.md)
-- Quizzes: [docs/quizzes/quiz-01-oidc.md](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/docs/quizzes/quiz-01-oidc.md), [docs/quizzes/quiz-02-wif.md](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/docs/quizzes/quiz-02-wif.md), [docs/quizzes/quiz-03-iam.md](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/docs/quizzes/quiz-03-iam.md), [docs/quizzes/answer-key.md](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/docs/quizzes/answer-key.md)
-- Runbooks: [docs/runbooks/initial-setup.md](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/docs/runbooks/initial-setup.md), [docs/runbooks/deploy.md](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/docs/runbooks/deploy.md), [docs/runbooks/troubleshoot-wif.md](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/docs/runbooks/troubleshoot-wif.md)
-- Secure reference and exercises: [labs/secure-reference/README.md](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/labs/secure-reference/README.md), [labs/exercises/exercise-01-decode-oidc-claims.md](/Users/waddymontero/Documents/OIDC%20WIF%20Lab/labs/exercises/exercise-01-decode-oidc-claims.md)
+- Workshops: `docs/workshops/`
+- Quizzes: `docs/quizzes/`
+- Runbooks: `docs/runbooks/`
+- Secure reference and exercises: `labs/`
