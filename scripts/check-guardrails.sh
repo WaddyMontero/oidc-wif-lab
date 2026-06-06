@@ -16,7 +16,7 @@ fail() {
 
 search() {
   if [[ "$SEARCH_TOOL" == "rg" ]]; then
-    rg "$@"
+    rg --glob '!infra/.terraform/**' "$@"
   else
     local supports_line_numbers="false"
     local args=()
@@ -43,9 +43,9 @@ search() {
     done
 
     if [[ "$supports_line_numbers" == "true" ]]; then
-      grep -R -n "${args[@]}"
+      grep -R -n --exclude='check-guardrails.sh' --exclude-dir='.terraform' "${args[@]}"
     else
-      grep -R "${args[@]}"
+      grep -R --exclude='check-guardrails.sh' --exclude-dir='.terraform' "${args[@]}"
     fi
   fi
 }
