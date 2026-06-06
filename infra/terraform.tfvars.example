@@ -1,0 +1,5 @@
+project_id             = "my-gcp-project-id"
+region                 = "us-central1"
+github_owner           = "my-github-user-or-org"
+github_repo            = "oidc-wif-lab"
+allow_unauthenticated  = false

@@ -1,0 +1,27 @@
+# Python cache and virtual environment folders.
+__pycache__/
+.pytest_cache/
+.venv/
+.venv
+venv/
+
+# Terraform working directory and generated state files.
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Local environment files are convenient for experiments but should not be committed.
+.env
+
+# Docker and OS noise.
+.DS_Store
+
+# The GitHub auth action can generate short-lived credentials files locally.
+# We ignore them so nobody accidentally commits a temporary credential artifact.
+gha-creds-*.json

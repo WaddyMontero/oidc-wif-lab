@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant Dev as Developer
+    participant GH as GitHub Actions
+    participant OIDC as GitHub OIDC issuer
+    participant WIF as GCP WIF provider
+    participant IAM as IAM / Service Account
+    participant GAR as Artifact Registry
+    participant CR as Cloud Run
+
+    Dev->>GH: push to main
+    GH->>OIDC: request OIDC token
+    OIDC-->>GH: signed JWT
+    GH->>WIF: exchange token
+    WIF->>IAM: validate mapped claims and condition
+    IAM-->>GH: impersonation allowed
+    GH->>GAR: push image
+    GH->>CR: deploy new revision

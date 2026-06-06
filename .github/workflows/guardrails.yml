@@ -1,0 +1,22 @@
+name: Guardrails
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/**"
+      - "infra/**"
+      - "scripts/**"
+
+permissions:
+  contents: read
+
+jobs:
+  guardrails:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Run guardrail checks
+        run: ./scripts/check-guardrails.sh

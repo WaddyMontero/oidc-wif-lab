@@ -1,0 +1,6 @@
+flowchart TD
+    A["GitHub Actions deploy job"] --> B["GitHub OIDC token"]
+    B --> C["GCP Workload Identity Federation provider"]
+    C --> D["Impersonate deployer service account"]
+    D --> E["Artifact Registry push"]
+    D --> F["Cloud Run deploy"]

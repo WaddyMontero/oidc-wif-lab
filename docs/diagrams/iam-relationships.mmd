@@ -1,0 +1,11 @@
+flowchart LR
+    A["GitHub staging workflow"] --> B["staging WIF provider"]
+    B --> C["gha-deployer-staging"]
+    C --> D["cloudrun-runtime-staging"]
+    C --> E["oidc-wif-lab-staging"]
+    C --> F["Artifact Registry"]
+    G["GitHub production workflow"] --> H["production WIF provider"]
+    H --> I["gha-deployer-production"]
+    I --> J["cloudrun-runtime-production"]
+    I --> K["oidc-wif-lab-production"]
+    I --> F

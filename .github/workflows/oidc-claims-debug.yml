@@ -1,0 +1,52 @@
+name: OIDC Claims Debug
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: GitHub Environment to inspect
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  inspect-claims:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - name: Print warning
+        run: |
+          echo "This workflow prints selected JWT claims only."
+          echo "The raw token is never printed."
+          echo "Claims are not credentials, but they still reveal workflow metadata."
+
+      - name: Request and decode GitHub OIDC token safely
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const token = await core.getIDToken('https://iam.googleapis.com/');
+            const [, payloadB64] = token.split('.');
+            const payloadJson = Buffer.from(payloadB64, 'base64url').toString('utf8');
+            const payload = JSON.parse(payloadJson);
+            const selected = {
+              iss: payload.iss,
+              aud: payload.aud,
+              sub: payload.sub,
+              repository: payload.repository,
+              repository_id: payload.repository_id,
+              repository_owner: payload.repository_owner,
+              ref: payload.ref,
+              environment: payload.environment,
+              workflow: payload.workflow,
+              workflow_ref: payload.workflow_ref,
+              actor: payload.actor,
+              event_name: payload.event_name,
+            };
+            core.info(JSON.stringify(selected, null, 2));

@@ -1,0 +1,14 @@
+# Keep the image context small so builds are faster and less likely to leak local files.
+.git
+.github
+docs
+infra
+labs
+scripts
+__pycache__
+.pytest_cache
+tests
+*.md
+.env
+.venv
+venv
